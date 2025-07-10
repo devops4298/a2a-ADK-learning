@@ -1,0 +1,126 @@
+{
+  "name": "ts-playwright-cucumber-reviewer",
+  "displayName": "TypeScript Playwright Cucumber Code Reviewer",
+  "description": "AI-powered code review assistant for TypeScript, Playwright, and Cucumber projects",
+  "version": "1.0.0",
+  "publisher": "your-publisher-name",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Linters",
+    "Testing",
+    "Other"
+  ],
+  "keywords": [
+    "typescript",
+    "playwright",
+    "cucumber",
+    "code-review",
+    "linting",
+    "testing",
+    "ai"
+  ],
+  "activationEvents": [
+    "onLanguage:typescript",
+    "onLanguage:javascript",
+    "onLanguage:gherkin"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "tsReviewer.analyzeFile",
+        "title": "Analyze Current File",
+        "category": "TS Reviewer"
+      },
+      {
+        "command": "tsReviewer.fixFile",
+        "title": "Apply One-Click Fix",
+        "category": "TS Reviewer"
+      },
+      {
+        "command": "tsReviewer.showStandards",
+        "title": "Show Coding Standards",
+        "category": "TS Reviewer"
+      },
+      {
+        "command": "tsReviewer.startServer",
+        "title": "Start Review Server",
+        "category": "TS Reviewer"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "tsReviewer.analyzeFile",
+          "when": "resourceExtname =~ /\\.(ts|js|feature)$/",
+          "group": "tsReviewer"
+        },
+        {
+          "command": "tsReviewer.fixFile",
+          "when": "resourceExtname =~ /\\.(ts|js)$/",
+          "group": "tsReviewer"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "tsReviewer.analyzeFile",
+          "when": "resourceExtname =~ /\\.(ts|js|feature)$/",
+          "group": "tsReviewer"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "TS Playwright Cucumber Reviewer",
+      "properties": {
+        "tsReviewer.serverUrl": {
+          "type": "string",
+          "default": "http://localhost:8000",
+          "description": "URL of the code review server"
+        },
+        "tsReviewer.autoAnalyze": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically analyze files on save"
+        },
+        "tsReviewer.showInlineHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline code hints for issues"
+        },
+        "tsReviewer.enabledFileTypes": {
+          "type": "array",
+          "default": ["typescript", "javascript", "gherkin"],
+          "description": "File types to analyze"
+        },
+        "tsReviewer.severityLevels": {
+          "type": "array",
+          "default": ["error", "warning", "info"],
+          "description": "Severity levels to show"
+        }
+      }
+    },
+    "chatParticipants": [
+      {
+        "id": "tsReviewer",
+        "name": "TS Code Reviewer",
+        "description": "AI-powered code review assistant for TypeScript, Playwright, and Cucumber",
+        "isSticky": true
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}
