@@ -1,0 +1,21 @@
+# Core ADK and AI dependencies
+google-adk>=1.6.1
+google-generativeai>=0.3.0
+google-cloud-aiplatform>=1.36.0
+
+# Web framework and server
+fastapi>=0.104.0
+uvicorn[standard]>=0.23.0
+pydantic>=2.0.0
+
+# Data processing and scraping
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+
+# Configuration and utilities
+python-dotenv>=1.0.0
+python-multipart>=0.0.6
+psutil>=5.9.0
+
+# Optional: Streamlit for UI (uncomment if needed)
+# streamlit>=1.24.0
