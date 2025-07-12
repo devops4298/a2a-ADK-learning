@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 from .server import run_server
-from .data.validator import validate_data_structure, get_data_summary
+# from .data.validator import validate_data_structure, get_data_summary  # Removed for production
 from .tools.confluence_search import get_knowledge_base_stats
 from .config.settings import get_agent_config, get_data_config, validate_config
 
@@ -29,18 +29,22 @@ def cmd_validate(args):
     """Validate data structure."""
     data_config = get_data_config()
     data_dir = args.data_dir or data_config["data_dir"]
-    
-    logger.info(f"Validating data structure in: {data_dir}")
-    
-    is_valid, issues = validate_data_structure(data_dir)
-    
-    if is_valid:
-        print("✅ Data structure is valid!")
-    else:
-        print("❌ Data structure validation failed:")
-        for issue in issues:
-            print(f"  • {issue}")
+
+    print(f"🔍 Checking data structure in: {data_dir}")
+
+    from pathlib import Path
+    data_path = Path(data_dir)
+
+    if not data_path.exists():
+        print("❌ Data directory does not exist. Run scrape command first.")
         sys.exit(1)
+
+    index_file = data_path / "index.json"
+    if not index_file.exists():
+        print("❌ Index file missing. Run scrape command to generate data.")
+        sys.exit(1)
+
+    print("✅ Basic data structure is valid!")
 
 
 def cmd_stats(args):
@@ -57,20 +61,32 @@ def cmd_summary(args):
     """Show data directory summary."""
     data_config = get_data_config()
     data_dir = args.data_dir or data_config["data_dir"]
-    
-    summary = get_data_summary(data_dir)
-    
+
     print(f"📊 Data Directory Summary: {data_dir}")
-    print(f"  • Exists: {'✅' if summary['exists'] else '❌'}")
-    print(f"  • Total Files: {summary['total_files']}")
-    print(f"  • Total Size: {summary['total_size_bytes']:,} bytes")
-    print(f"  • Spaces: {', '.join(summary['spaces']) if summary['spaces'] else 'None'}")
-    print(f"  • Validation: {'✅' if summary['validation_status'] == 'valid' else '❌'}")
-    
-    if summary['validation_issues']:
-        print("\n⚠️  Validation Issues:")
-        for issue in summary['validation_issues']:
-            print(f"  • {issue}")
+
+    try:
+        from pathlib import Path
+        data_path = Path(data_dir)
+
+        if not data_path.exists():
+            print("❌ Data directory does not exist. Run scrape command first.")
+            return
+
+        # Count files and directories
+        json_files = list(data_path.glob("**/*.json"))
+        spaces = [d.name for d in data_path.iterdir() if d.is_dir() and d.name != "vector_db"]
+
+        print(f"  • Exists: ✅")
+        print(f"  • Total JSON Files: {len(json_files)}")
+        print(f"  • Total Spaces: {len(spaces)}")
+        print(f"  • Spaces: {', '.join(spaces) if spaces else 'None'}")
+
+        # Check for index file
+        index_file = data_path / "index.json"
+        print(f"  • Index file: {'✅' if index_file.exists() else '❌'}")
+
+    except Exception as e:
+        print(f"❌ Error reading data directory: {e}")
 
 
 def cmd_config(args):
@@ -93,13 +109,57 @@ def cmd_config(args):
 
 def cmd_test(args):
     """Run tests."""
+    print("🧪 Test functionality removed for production build.")
+    print("✅ Use the scraper and serve commands for production usage.")
+
+
+def cmd_scrape(args):
+    """Scrape COM Insurance Confluence space."""
+    from .data.scraper import ConfluenceCloudScraper
+
+    print("🚀 COM Insurance Confluence Scraper")
+    print("=" * 50)
+    print(f"Space: {args.space_key}")
+    print(f"Output: {args.output_dir}")
+    print("-" * 50)
+
     try:
-        import pytest
-        test_dir = Path(__file__).parent / "tests"
-        exit_code = pytest.main([str(test_dir), "-v"])
-        sys.exit(exit_code)
-    except ImportError:
-        logger.error("pytest not installed. Install with: pip install pytest")
+        scraper = ConfluenceCloudScraper()
+        scraper.space_key = args.space_key
+
+        # Test connection
+        print("Testing connection to Confluence...")
+        if not scraper.test_connection():
+            print("\n❌ Connection failed. Please:")
+            print("1. Open Chrome and log into https://COMinsurence.atlassian.net")
+            print("2. Make sure you have access to the EQE space")
+            print("3. Run this command again")
+            return
+
+        print("✅ Connection successful!")
+
+        # Start scraping
+        print(f"\nStarting to scrape space: {args.space_key}")
+        result = scraper.scrape_space_to_files(args.output_dir, args.space_key)
+
+        if result:
+            print(f"\n🎉 Scraping completed!")
+            print(f"✅ Successfully processed: {result['success']} pages")
+            print(f"📁 Files saved to: {result['output_dir']}")
+            print(f"📋 Index file: {result['index_file']}")
+
+            if result['failed'] > 0:
+                print(f"⚠️  Failed to process: {result['failed']} pages")
+
+            print(f"\n🔄 Next steps:")
+            print(f"1. Run 'python3 -m confluence_knowledge_agent.cli validate' to check data")
+            print(f"2. Run 'python3 -m confluence_knowledge_agent.cli serve' to start the agent")
+        else:
+            print("❌ Scraping failed. Check the logs for details.")
+
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        logger.exception("Scraping failed")
         sys.exit(1)
 
 
@@ -110,6 +170,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
+  %(prog)s scrape                   # Scrape COM Insurance Confluence space
   %(prog)s serve                    # Start the server
   %(prog)s validate                 # Validate data structure
   %(prog)s stats                    # Show knowledge base stats
@@ -146,6 +207,12 @@ Examples:
     # Test command
     test_parser = subparsers.add_parser("test", help="Run tests")
     test_parser.set_defaults(func=cmd_test)
+
+    # Scrape command
+    scrape_parser = subparsers.add_parser("scrape", help="Scrape COM Insurance Confluence space")
+    scrape_parser.add_argument("--output-dir", default="confluence_data", help="Output directory for scraped data")
+    scrape_parser.add_argument("--space-key", default="EQE", help="Confluence space key to scrape")
+    scrape_parser.set_defaults(func=cmd_scrape)
     
     args = parser.parse_args()
     

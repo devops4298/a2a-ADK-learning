@@ -1,0 +1,11 @@
+{
+  "content": "# REST API Reference\n\nComplete reference for our REST API endpoints.\n\n## Authentication\n\nAll API requests require authentication using an API key:\n\n```bash\ncurl -H \"Authorization: Bearer YOUR_API_KEY\" \\\n     https://api.example.com/v1/endpoint\n```\n\n## Base URL\n\n```\nhttps://api.example.com/v1\n```\n\n## Endpoints\n\n### Users\n\n#### GET /users\n\nRetrieve a list of users.\n\n**Parameters:**\n- `page` (optional): Page number (default: 1)\n- `limit` (optional): Items per page (default: 20)\n\n**Response:**\n```json\n{\n  \"users\": [\n    {\n      \"id\": \"123\",\n      \"name\": \"John Doe\",\n      \"email\": \"john@example.com\",\n      \"created_at\": \"2024-01-01T00:00:00Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"limit\": 20,\n    \"total\": 100\n  }\n}\n```\n\n#### POST /users\n\nCreate a new user.\n\n**Request Body:**\n```json\n{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"secure_password\"\n}\n```\n\n**Response:**\n```json\n{\n  \"id\": \"124\",\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"created_at\": \"2024-01-15T10:30:00Z\"\n}\n```\n\n### Projects\n\n#### GET /projects\n\nRetrieve user projects.\n\n#### POST /projects\n\nCreate a new project.\n\n#### PUT /projects/{id}\n\nUpdate an existing project.\n\n#### DELETE /projects/{id}\n\nDelete a project.\n\n## Error Handling\n\nThe API uses standard HTTP status codes:\n\n- `200` - Success\n- `400` - Bad Request\n- `401` - Unauthorized\n- `404` - Not Found\n- `500` - Internal Server Error\n\n**Error Response Format:**\n```json\n{\n  \"error\": {\n    \"code\": \"INVALID_REQUEST\",\n    \"message\": \"The request is invalid\",\n    \"details\": \"Field 'email' is required\"\n  }\n}\n```\n\n## Rate Limiting\n\n- 1000 requests per hour per API key\n- Rate limit headers included in responses\n\n## SDKs and Libraries\n\n- Python: `pip install example-api-client`\n- JavaScript: `npm install example-api-client`\n- Go: `go get github.com/example/api-client`",
+  "metadata": {
+    "title": "REST API Reference",
+    "url": "https://confluence.example.com/display/API/REST+API+Reference",
+    "last_updated": "2024-01-12T09:15:00Z",
+    "space_key": "API",
+    "author": "API Team",
+    "tags": ["api", "rest", "reference", "documentation"]
+  }
+}

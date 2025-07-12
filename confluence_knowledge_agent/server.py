@@ -193,7 +193,7 @@ async def get_metrics():
 async def get_stats():
     """
     Get knowledge base statistics.
-    
+
     Returns:
         StatsResponse: Knowledge base statistics
     """
@@ -204,6 +204,24 @@ async def get_stats():
         return StatsResponse(stats={"summary": stats_text})
     except Exception as e:
         logger.error(f"Error getting stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/stats/detailed")
+async def get_detailed_stats() -> Dict[str, Any]:
+    """
+    Get detailed knowledge base statistics including vector search info.
+
+    Returns:
+        Dict containing detailed statistics
+    """
+    try:
+        from .tools.confluence_search import get_knowledge_base
+        kb = get_knowledge_base()
+        detailed_stats = kb.get_stats()
+        return {"stats": detailed_stats}
+    except Exception as e:
+        logger.error(f"Error getting detailed stats: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -230,24 +248,21 @@ async def chat_endpoint(
         user_id = request.user_id or str(uuid.uuid4())
         session_id = request.session_id or str(uuid.uuid4())
         
-        # Create session if it doesn't exist
+        # Always create a new session to avoid session issues
         try:
-            await runner.session_service.get_session(
-                app_name="confluence_knowledge_agent",
-                user_id=user_id,
-                session_id=session_id
-            )
-        except:
-            # Session doesn't exist, create it
             await runner.session_service.create_session(
                 app_name="confluence_knowledge_agent",
                 user_id=user_id,
                 session_id=session_id
             )
+            logger.info(f"Created new session: {session_id}")
+        except Exception as e:
+            logger.warning(f"Session creation failed: {e}, continuing anyway")
         
         # Create message content
         message_content = types.Content(parts=[types.Part(text=request.message)])
-        
+        logger.info(f"Sending message to agent: {request.message}")
+
         # Run the agent
         events = []
         async for event in runner.run_async(
@@ -256,8 +271,8 @@ async def chat_endpoint(
             new_message=message_content
         ):
             events.append(event)
-        
-        # Extract the response from events
+
+        # Check if we got a generic initialization response
         response_text = ""
         for event in events:
             if hasattr(event, 'content') and event.content:
@@ -265,6 +280,34 @@ async def chat_endpoint(
                     for part in event.content.parts:
                         if hasattr(part, 'text') and part.text:
                             response_text += part.text
+
+        # If the response is generic/initialization, bypass ADK and use search tool directly
+        if ("I understand" in response_text or
+            "I will use" in response_text or
+            "search_confluence_knowledge tool" in response_text or
+            len(response_text) < 300):
+            logger.info(f"Got generic response, using search tool directly for: {request.message}")
+
+            # Import and use the search tool directly
+            from .tools.confluence_search import search_confluence_knowledge
+
+            # Use the search tool directly with the user's message
+            try:
+                search_result = search_confluence_knowledge(request.message)
+                response_text = search_result
+                logger.info("Successfully used search tool directly")
+            except Exception as e:
+                logger.error(f"Direct search failed: {e}")
+                response_text = f"I apologize, but I'm having trouble searching the knowledge base right now. Error: {str(e)}"
+        
+        # Extract the response from events (if not already set by direct search)
+        if not response_text:  # Only extract if we haven't already set response_text
+            for event in events:
+                if hasattr(event, 'content') and event.content:
+                    if hasattr(event.content, 'parts'):
+                        for part in event.content.parts:
+                            if hasattr(part, 'text') and part.text:
+                                response_text += part.text
         
         if not response_text:
             response_text = "I apologize, but I couldn't generate a response. Please try again."

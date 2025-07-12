@@ -1,0 +1,11 @@
+{
+  "content": "# Getting Started Guide\n\nWelcome to our platform! This guide will help you get up and running quickly.\n\n## Prerequisites\n\nBefore you begin, make sure you have:\n- A valid user account\n- Access to the development environment\n- Basic knowledge of REST APIs\n\n## Quick Start\n\n1. **Login to the system**\n   - Navigate to the login page\n   - Enter your credentials\n   - Click 'Sign In'\n\n2. **Set up your workspace**\n   - Create a new project\n   - Configure your settings\n   - Invite team members\n\n3. **Deploy your first application**\n   - Follow the deployment guide\n   - Test your application\n   - Monitor the deployment\n\n## Next Steps\n\n- Read the API documentation\n- Check out the troubleshooting guide\n- Join our community forum\n\n## Support\n\nIf you need help, contact our support team at support@example.com",
+  "metadata": {
+    "title": "Getting Started Guide",
+    "url": "https://confluence.example.com/display/DOCS/Getting+Started+Guide",
+    "last_updated": "2024-01-15T10:30:00Z",
+    "space_key": "DOCS",
+    "author": "Documentation Team",
+    "tags": ["getting-started", "tutorial", "beginner"]
+  }
+}

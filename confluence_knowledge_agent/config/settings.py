@@ -8,6 +8,14 @@ import os
 from typing import Dict, Any
 from pathlib import Path
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    # dotenv not available, skip loading .env file
+    pass
+
 
 def get_agent_config() -> Dict[str, Any]:
     """
@@ -25,21 +33,7 @@ def get_agent_config() -> Dict[str, Any]:
         ),
         "instruction": os.getenv(
             "AGENT_INSTRUCTION",
-            """You are a helpful Confluence knowledge assistant. Your role is to help users find 
-            information from Confluence documentation quickly and accurately.
-
-            When a user asks a question:
-            1. Use the search_confluence_knowledge tool to find relevant information
-            2. Provide comprehensive answers based on the retrieved content
-            3. Always include proper citations to source Confluence pages
-            4. If no relevant information is found, clearly state that
-            5. Be helpful and guide users to find what they need
-
-            Format your responses clearly and include citations in this format:
-            [Page Title](URL) - Last updated: DATE
-
-            Only provide information that is available in the knowledge base. If you cannot find 
-            relevant information, politely inform the user and suggest alternative approaches."""
+            """You are a Confluence knowledge assistant. For every user question, search the knowledge base using the search_confluence_knowledge tool and provide helpful answers with citations."""
         ),
         "max_tokens": int(os.getenv("AGENT_MAX_TOKENS", "8192")),
         "temperature": float(os.getenv("AGENT_TEMPERATURE", "0.1")),

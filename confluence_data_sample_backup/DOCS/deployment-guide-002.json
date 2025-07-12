@@ -1,0 +1,11 @@
+{
+  "content": "# Application Deployment Guide\n\nThis guide covers how to deploy applications to our platform.\n\n## Deployment Methods\n\n### 1. Docker Deployment\n\n```bash\n# Build the Docker image\ndocker build -t myapp:latest .\n\n# Run the container\ndocker run -p 8080:8080 myapp:latest\n```\n\n### 2. Kubernetes Deployment\n\n```yaml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: myapp\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: myapp\n  template:\n    metadata:\n      labels:\n        app: myapp\n    spec:\n      containers:\n      - name: myapp\n        image: myapp:latest\n        ports:\n        - containerPort: 8080\n```\n\n### 3. Cloud Deployment\n\n- **AWS**: Use ECS or EKS\n- **Google Cloud**: Use GKE or Cloud Run\n- **Azure**: Use AKS or Container Instances\n\n## Environment Configuration\n\n### Environment Variables\n\n```bash\nexport DATABASE_URL=postgresql://user:pass@localhost/db\nexport API_KEY=your-api-key\nexport LOG_LEVEL=INFO\n```\n\n### Configuration Files\n\nCreate a `config.yaml` file:\n\n```yaml\nserver:\n  port: 8080\n  host: 0.0.0.0\n\ndatabase:\n  url: postgresql://user:pass@localhost/db\n  pool_size: 10\n\nlogging:\n  level: INFO\n  format: json\n```\n\n## Monitoring and Health Checks\n\n- Health endpoint: `/health`\n- Metrics endpoint: `/metrics`\n- Logs: Check application logs for errors\n\n## Troubleshooting\n\n- Check container logs: `docker logs <container-id>`\n- Verify environment variables\n- Test network connectivity\n- Check resource limits",
+  "metadata": {
+    "title": "Application Deployment Guide",
+    "url": "https://confluence.example.com/display/DOCS/Application+Deployment+Guide",
+    "last_updated": "2024-01-10T14:20:00Z",
+    "space_key": "DOCS",
+    "author": "DevOps Team",
+    "tags": ["deployment", "docker", "kubernetes", "cloud"]
+  }
+}

@@ -55,12 +55,21 @@ def search_confluence_knowledge(query: str, limit: int = 5) -> str:
         results = kb.search(query.strip(), limit)
         
         if not results:
-            return f"""No relevant information found in the Confluence knowledge base for: "{query}"
+            return f"""I apologize, but I couldn't find any information about "{query}" in our Confluence knowledge base.
 
-Suggestions:
-- Try using different keywords
-- Check spelling and try broader terms
-- Ask about general topics that might be covered in the documentation"""
+The knowledge base currently contains documentation about:
+• Application deployment and configuration
+• User management and permissions
+• Security best practices
+• API reference and troubleshooting
+• System configuration
+
+**To get the information you need:**
+• Try rephrasing your question using different terms
+• Ask about topics that are documented in the knowledge base
+• Check if your question relates to any of the available documentation areas
+
+I can only provide information that exists in our Confluence documentation. If the information you're looking for isn't documented yet, you may need to consult other resources or contact the appropriate team directly."""
         
         # Format results
         config = get_data_config()

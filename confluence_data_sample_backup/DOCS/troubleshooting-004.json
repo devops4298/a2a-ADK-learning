@@ -1,0 +1,11 @@
+{
+  "content": "# Troubleshooting Common Issues\n\nThis guide helps you resolve common problems you might encounter.\n\n## Application Won't Start\n\n### Symptoms\n- Application fails to start\n- Error messages in logs\n- Port binding issues\n\n### Solutions\n\n1. **Check Port Availability**\n   ```bash\n   lsof -i :8080\n   ```\n\n2. **Verify Environment Variables**\n   ```bash\n   echo $DATABASE_URL\n   echo $API_KEY\n   ```\n\n3. **Check Logs**\n   ```bash\n   docker logs <container-name>\n   ```\n\n## Database Connection Issues\n\n### Symptoms\n- Connection timeout errors\n- Authentication failures\n- Database not found errors\n\n### Solutions\n\n1. **Test Database Connection**\n   ```bash\n   psql -h localhost -U username -d database\n   ```\n\n2. **Check Network Connectivity**\n   ```bash\n   ping database-host\n   telnet database-host 5432\n   ```\n\n## API Authentication Problems\n\n### Symptoms\n- 401 Unauthorized errors\n- Invalid API key messages\n- Token expiration errors\n\n### Solutions\n\n1. **Verify API Key**\n   - Check API key format\n   - Ensure key is not expired\n   - Test with curl\n\n2. **Check Headers**\n   ```bash\n   curl -H \"Authorization: Bearer YOUR_KEY\" \\\n        https://api.example.com/health\n   ```\n\n## Performance Issues\n\n### Symptoms\n- Slow response times\n- High CPU usage\n- Memory leaks\n\n### Solutions\n\n1. **Monitor Resources**\n   ```bash\n   top\n   htop\n   docker stats\n   ```\n\n2. **Check Application Metrics**\n   - Visit `/metrics` endpoint\n   - Review application logs\n   - Monitor database queries\n\n## Getting Help\n\nIf these solutions don't resolve your issue:\n\n1. Check our FAQ section\n2. Search the knowledge base\n3. Contact support at support@example.com\n4. Join our community forum",
+  "metadata": {
+    "title": "Troubleshooting Common Issues",
+    "url": "https://confluence.example.com/display/DOCS/Troubleshooting+Common+Issues",
+    "last_updated": "2024-01-08T16:45:00Z",
+    "space_key": "DOCS",
+    "author": "Support Team",
+    "tags": ["troubleshooting", "debugging", "support", "issues"]
+  }
+}

@@ -1,0 +1,79 @@
+[
+  {
+    "id": "getting-started-001",
+    "space_key": "DOCS",
+    "title": "Getting Started Guide",
+    "url": "https://confluence.example.com/display/DOCS/Getting+Started+Guide",
+    "last_updated": "2024-01-15T10:30:00Z"
+  },
+  {
+    "id": "deployment-guide-002",
+    "space_key": "DOCS",
+    "title": "Application Deployment Guide",
+    "url": "https://confluence.example.com/display/DOCS/Application+Deployment+Guide",
+    "last_updated": "2024-01-10T14:20:00Z"
+  },
+  {
+    "id": "api-reference-003",
+    "space_key": "API",
+    "title": "REST API Reference",
+    "url": "https://confluence.example.com/display/API/REST+API+Reference",
+    "last_updated": "2024-01-12T09:15:00Z"
+  },
+  {
+    "id": "troubleshooting-004",
+    "space_key": "DOCS",
+    "title": "Troubleshooting Common Issues",
+    "url": "https://confluence.example.com/display/DOCS/Troubleshooting+Common+Issues",
+    "last_updated": "2024-01-08T16:45:00Z"
+  },
+  {
+    "id": "configuration-005",
+    "space_key": "ADMIN",
+    "title": "System Configuration Guide",
+    "url": "https://confluence.example.com/display/ADMIN/System+Configuration+Guide",
+    "last_updated": "2024-01-05T11:30:00Z"
+  },
+  {
+    "id": "user-management-006",
+    "space_key": "ADMIN",
+    "title": "User Management and Permissions",
+    "url": "https://confluence.example.com/display/ADMIN/User+Management+and+Permissions",
+    "last_updated": "2024-01-20T14:15:00Z"
+  },
+  {
+    "id": "security-guide-007",
+    "space_key": "SECURITY",
+    "title": "Security Best Practices",
+    "url": "https://confluence.example.com/display/SECURITY/Security+Best+Practices",
+    "last_updated": "2024-01-18T11:30:00Z"
+  },
+  {
+    "id": "monitoring-guide-008",
+    "space_key": "OPS",
+    "title": "Monitoring and Alerting Setup",
+    "url": "https://confluence.example.com/display/OPS/Monitoring+and+Alerting+Setup",
+    "last_updated": "2024-01-22T09:45:00Z"
+  },
+  {
+    "id": "database-guide-009",
+    "space_key": "DOCS",
+    "title": "Database Setup and Management",
+    "url": "https://confluence.example.com/display/DOCS/Database+Setup+and+Management",
+    "last_updated": "2024-01-25T16:20:00Z"
+  },
+  {
+    "id": "faq-010",
+    "space_key": "SUPPORT",
+    "title": "Frequently Asked Questions",
+    "url": "https://confluence.example.com/display/SUPPORT/Frequently+Asked+Questions",
+    "last_updated": "2024-01-28T13:10:00Z"
+  },
+  {
+    "id": "server-commands-011",
+    "space_key": "DOCS",
+    "title": "Server Commands and Quick Start",
+    "url": "https://confluence.example.com/display/DOCS/Server+Commands+and+Quick+Start",
+    "last_updated": "2024-01-30T10:00:00Z"
+  }
+]
